@@ -1,23 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useContext, useEffect, useState } from 'react';
 import './App.css';
+import { getFacts } from './apis';
+import { Messagecontext } from './data/context';
+import { ApplicationMessages } from './models/language';
 
 function App() {
+  const messages = useContext<ApplicationMessages>(Messagecontext)
+  const [fact, setFact] = useState('');
+  useEffect(() => {
+    getFacts()
+      .then(x => {
+        setFact(x.data.fact)
+      })
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <h1>{messages.heading}</h1>
+      <header data-testid='header' className="App-header">
+        {fact}
       </header>
     </div>
   );
